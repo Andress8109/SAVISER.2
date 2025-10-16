@@ -145,6 +145,21 @@ export const getAvailableActions = async (req, res) => {
   }
 };
 
+export const getPatientByIdNumber = async (req, res) => {
+  try {
+    const { idNumber } = req.params;
+    const patient = await Patient.findOne({ idNumber });
+
+    if (!patient) {
+      return res.status(404).json({ message: 'Paciente no encontrado' });
+    }
+
+    res.json(patient);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 export const getPatientStats = async (req, res) => {
   try {
     const total = await Patient.countDocuments();

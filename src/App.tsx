@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
 import { Patient, State, Action, TransitionHistory } from './types/automaton';
-import { getAvailableActions, getStateInfo } from './data/automaton';
+import { getAvailableActions } from './data/automaton';
 import PatientCard from './components/PatientCard';
 import PatientDetails from './components/PatientDetails';
 import NewPatientForm from './components/NewPatientForm';
 import Dashboard from './components/Dashboard';
-import { Heart, UserPlus, Search, Filter, Database, Wifi, WifiOff } from 'lucide-react';
+import { Heart, UserPlus, Search, Filter, Database, WifiOff } from 'lucide-react';
 import { api } from './services/api';
 
 function App() {

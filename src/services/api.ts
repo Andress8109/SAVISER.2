@@ -33,6 +33,22 @@ export const api = {
     };
   },
 
+  async getPatientByIdNumber(idNumber: string): Promise<Patient | null> {
+    const response = await fetch(`${API_URL}/patients/id-number/${idNumber}`);
+    if (response.status === 404) return null;
+    if (!response.ok) throw new Error('Error al buscar paciente');
+    const data = await response.json();
+    return {
+      ...data,
+      id: data._id,
+      createdAt: new Date(data.createdAt),
+      history: data.history.map((h: any) => ({
+        ...h,
+        timestamp: new Date(h.timestamp)
+      }))
+    };
+  },
+
   async createPatient(name: string, idNumber: string, urgency: 'normal' | 'urgent'): Promise<Patient> {
     const response = await fetch(`${API_URL}/patients`, {
       method: 'POST',
