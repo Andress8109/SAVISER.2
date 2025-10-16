@@ -38,23 +38,52 @@ El servidor se ejecutará en `http://localhost:3001`
 
 - `GET /api/patients` - Obtener todos los pacientes
 - `GET /api/patients/:id` - Obtener un paciente por ID
+- `GET /api/patients/id-number/:idNumber` - Obtener paciente por número de identificación
 - `POST /api/patients` - Crear nuevo paciente
   ```json
   {
-    "name": "Juan Pérez",
-    "idNumber": "1234567890",
-    "urgency": "normal"
+    "identification_number": "1234567890",
+    "identification_type": "CC",
+    "first_name": "Juan",
+    "last_name": "Pérez",
+    "date_of_birth": "1990-01-01",
+    "gender": "M",
+    "blood_type": "O+",
+    "address": "Calle 123",
+    "city": "Bogotá",
+    "phone": "3001234567",
+    "email": "juan@example.com",
+    "eps": "SURA",
+    "emergency_contact_name": "María Pérez",
+    "emergency_contact_phone": "3009876543"
   }
   ```
-- `PUT /api/patients/:id/transition` - Actualizar estado del paciente
-  ```json
-  {
-    "action": "iniciar"
-  }
-  ```
+- `PUT /api/patients/:id` - Actualizar paciente
 - `DELETE /api/patients/:id` - Eliminar paciente
-- `GET /api/patients/:id/actions` - Obtener acciones disponibles para un paciente
 - `GET /api/patients/stats` - Obtener estadísticas generales
+
+### Visitas Médicas
+
+- `POST /api/visits` - Crear visita médica
+- `GET /api/patients/:id/visits` - Obtener visitas de un paciente
+
+### Alergias
+
+- `POST /api/allergies` - Registrar alergia
+- `GET /api/patients/:id/allergies` - Obtener alergias de un paciente
+
+### Historial Médico
+
+- `POST /api/medical-history` - Registrar condición médica
+- `GET /api/patients/:id/medical-history` - Obtener historial médico
+
+### Prescripciones
+
+- `POST /api/prescriptions` - Crear prescripción
+
+### Resultados de Laboratorio
+
+- `POST /api/lab-results` - Registrar resultado de laboratorio
 
 ## Estructura del Proyecto
 
@@ -64,7 +93,12 @@ backend/
 │   ├── config/
 │   │   └── database.js       # Configuración MongoDB
 │   ├── models/
-│   │   └── Patient.js        # Modelo de datos
+│   │   ├── Patient.js        # Modelo de pacientes
+│   │   ├── MedicalVisit.js   # Modelo de visitas médicas
+│   │   ├── Allergy.js        # Modelo de alergias
+│   │   ├── MedicalHistory.js # Modelo de historial médico
+│   │   ├── Prescription.js   # Modelo de prescripciones
+│   │   └── LabResult.js      # Modelo de resultados de laboratorio
 │   ├── controllers/
 │   │   └── patientController.js  # Lógica de negocio
 │   ├── routes/
@@ -73,36 +107,3 @@ backend/
 ├── .env                      # Variables de entorno
 └── package.json
 ```
-
-## Estados del Autómata
-
-El sistema implementa 21 estados (q0-q20) según el autómata finito determinístico:
-
-- q0: Estado Inicial
-- q1: Registro Paciente
-- q2: Triaje
-- q3: Espera Consulta
-- q4: Consulta General
-- q5: Evaluación Médica
-- q6: Solicitud Exámenes
-- q7: Espera Resultados
-- q8: Análisis Resultados
-- q9: Derivación Especialista
-- q10: Consulta Especializada
-- q11: Diagnóstico
-- q12: Prescripción Tratamiento
-- q13: Administración Medicamentos
-- q14: Programación Cirugía
-- q15: Procedimiento Quirúrgico
-- q16: Recuperación
-- q17: Seguimiento
-- q18: Alta Médica
-- q19: Facturación
-- q20: Proceso Completado
-
-## Acciones Válidas
-
-Las transiciones entre estados están validadas según el autómata:
-- iniciar, registrar, evaluar_urgencia, urgencia, asignar_cita, examinar
-- solicitar_examen, recibir_resultado, derivar, diagnosticar, prescribir
-- administrar, programar_cirugia, operar, monitorear, dar_alta, facturar, finalizar
